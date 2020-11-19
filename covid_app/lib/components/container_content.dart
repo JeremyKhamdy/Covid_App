@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 
@@ -7,13 +9,17 @@ class ContainerContent extends StatelessWidget {
   final number;
   final numberColor;
   final data;
+  final colors;
+  final lineColor;
 
   const ContainerContent({
     Key key,
     this.text,
     this.number,
     this.data,
-    this.numberColor
+    this.numberColor,
+    this.colors,
+    this.lineColor
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -52,6 +58,13 @@ class ContainerContent extends StatelessWidget {
           SizedBox(height: size.height * 0.02,),
           Sparkline(
             data: data,
+            lineColor: lineColor,
+            fillMode: FillMode.below,
+            fillGradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: colors
+            ),
           )
         ],
       ),
