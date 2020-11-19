@@ -4,12 +4,40 @@
 
 import 'dart:convert';
 
-List<Covid> covidFromJson(String str) => List<Covid>.from(json.decode(str).map((x) => Covid.fromJson(x)));
+Covid covidFromJson(String str) => Covid.fromJson(json.decode(str));
 
-String covidToJson(List<Covid> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String covidToJson(Covid data) => json.encode(data.toJson());
 
 class Covid {
   Covid({
+    this.cases,
+    this.deaths,
+    this.recovered,
+    this.days,
+  });
+
+  int cases;
+  int deaths;
+  int recovered;
+  List<Day> days;
+
+  factory Covid.fromJson(Map<String, dynamic> json) => Covid(
+    cases: json["cases"],
+    deaths: json["deaths"],
+    recovered: json["recovered"],
+    days: List<Day>.from(json["days"].map((x) => Day.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "cases": cases,
+    "deaths": deaths,
+    "recovered": recovered,
+    "days": List<dynamic>.from(days.map((x) => x.toJson())),
+  };
+}
+
+class Day {
+  Day({
     this.lastUpdate,
     this.totalCases,
     this.totalDeaths,
@@ -21,7 +49,7 @@ class Covid {
   int totalDeaths;
   int totalRecovered;
 
-  factory Covid.fromJson(Map<String, dynamic> json) => Covid(
+  factory Day.fromJson(Map<String, dynamic> json) => Day(
     lastUpdate: DateTime.parse(json["last_update"]),
     totalCases: json["total_cases"],
     totalDeaths: json["total_deaths"],
@@ -30,8 +58,8 @@ class Covid {
 
   Map<String, dynamic> toJson() => {
     "last_update": lastUpdate.toIso8601String(),
-    "total_cases": totalCases,
-    "total_deaths": totalDeaths,
-    "total_recovered": totalRecovered,
+    "totalCases": totalCases,
+    "totalDeaths": totalDeaths,
+    "totalRecovered": totalRecovered,
   };
 }
