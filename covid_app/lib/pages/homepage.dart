@@ -76,7 +76,7 @@ class _HomepageState extends State<Homepage> {
                               Container(
                                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                   width: double.infinity,
-                                  height: size.height * 0.1,
+                                  height: /*size.height * 0.1*/ 100,
                                   decoration: BoxDecoration(
                                       // color: Colors.white24
                                   ),

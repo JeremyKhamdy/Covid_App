@@ -41,7 +41,7 @@ class ContainerContent extends StatelessWidget {
           ),
         ],
       ),
-      height: (size.height - 15) * 0.3,
+      height: /*(size.height - 15) * 0.3*/ 250,
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
