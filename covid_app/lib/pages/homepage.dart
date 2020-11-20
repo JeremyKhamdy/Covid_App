@@ -16,13 +16,12 @@ class _HomepageState extends State<Homepage> {
   List<double> dataDeaths = [];
   List<double> dataRecovered = [];
   Future <Covid> _covid;
+  Color action = Colors.black38;
+  Icon actionIcon = new Icon(Icons.refresh);
 
   @override
   void initState() {
     _covid = Covid_Manager().getTimeline();
-    dataCases = [];
-    dataDeaths = [];
-    dataRecovered = [];
     super.initState();
   }
 
@@ -30,100 +29,71 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-
-      // appBar: AppBar(
-      //   flexibleSpace: FlexibleSpaceBar(
-      //     collapseMode: CollapseMode.pin,
-      //     centerTitle: true,
-      //
-      //   ),
-      //   brightness: Brightness.dark,
-      //   toolbarHeight: 250.0,
-      //   backgroundColor: Colors.purple[700],
-      //   centerTitle: true,
-      //   title: Text("COVID 19 Informations", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-      // ),
-      // body: SingleChildScrollView(
-      //   child: Container(
-      //     // width: double.infinity,
-      //     child: FutureBuilder<Covid>(
-      //       future: _covid,
-      //       builder: (context, snapshot){
-      //         if(snapshot.hasData){
-      //
-      //           for (var i = 0; i < 7; i++) {
-      //             dataCases.add(snapshot.data.days[i].totalCases.toDouble());
-      //             dataDeaths.add(snapshot.data.days[i].totalDeaths.toDouble());
-      //             dataRecovered.add(snapshot.data.days[i].totalRecovered.toDouble());
-      //           }
-      //           print(dataCases);
-      //           print(dataDeaths);
-      //           print(dataRecovered);
-      //           return Column(
-      //             children: [
-      //               ContainerContent(
-      //                 number: snapshot.data.cases.toString(),
-      //                 text: "Nombres de cas enregistrés ces 7 derniers jours",
-      //                 data: dataCases.reversed.toList(),
-      //                 numberColor: Colors.blueAccent,
-      //                 colors: [Colors.blueAccent, Colors.white70],
-      //                 lineColor: Colors.blue,
-      //               ),
-      //               ContainerContent(
-      //                 number: snapshot.data.deaths.toString(),
-      //                 text: "Nombres de décès ces 7 derniers jours",
-      //                 data: dataDeaths.reversed.toList(),
-      //                 numberColor: Colors.redAccent,
-      //                 colors: [Colors.redAccent, Colors.white70],
-      //                 lineColor: Colors.red,
-      //               ),
-      //               ContainerContent(
-      //                 number: snapshot.data.recovered.toString(),
-      //                 text: "Nombres de cas soignés ces 7 derniers jours",
-      //                 data: dataRecovered.reversed.toList(),
-      //                 numberColor: Colors.greenAccent,
-      //                 colors: [Colors.greenAccent, Colors.white70],
-      //                 lineColor: Colors.green,
-      //               ),
-      //             ],
-      //           );
-      //         } else {
-      //           return Center( child: CircularProgressIndicator(),);
-      //         }
-      //       },
-      //     ),
-      //   ),
-      // ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             centerTitle: true,
-            backgroundColor: Colors.purple[700],
+            backgroundColor: Colors.white38,
             floating: true,
-            expandedHeight: 200.0,
+            // expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('COVID 19'),
+              title: Text('COVID 19', style: TextStyle(color: Colors.black38),),
               centerTitle: true,
             ),
+            actions: [
+              IconButton(
+                icon: actionIcon,
+                color: action,
+                onPressed: (){
+                  setState(() {
+                    _covid = Covid_Manager().getTimeline();
+                  });
+                },
+              )
+            ],
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
                 (contex, index) {
                   return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white38
+                    ),
                     width: double.infinity,
                     child: FutureBuilder<Covid>(
                       future: _covid,
                       builder: (context, snapshot){
                         if(snapshot.hasData){
-
-                          for (var i = 0; i < 7; i++) {
-                            dataCases.add(snapshot.data.days[i].totalCases.toDouble());
-                            dataDeaths.add(snapshot.data.days[i].totalDeaths.toDouble());
-                            dataRecovered.add(snapshot.data.days[i].totalRecovered.toDouble());
+                          if (dataCases.isEmpty && dataDeaths.isEmpty && dataRecovered.isEmpty){
+                            for (var i = 0; i < 7; i++) {
+                                dataCases.add(snapshot.data.days[i].totalCases.toDouble());
+                                dataDeaths.add(snapshot.data.days[i].totalDeaths.toDouble());
+                                dataRecovered.add(snapshot.data.days[i].totalRecovered.toDouble());
+                            }
                           }
-
                           return Column(
                             children: [
+                              Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                  width: double.infinity,
+                                  height: size.height * 0.1,
+                                  decoration: BoxDecoration(
+                                      // color: Colors.white24
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    // mainAxisAlignment: MainAxisAlignment.,
+                                    children: [
+                                      Text(
+                                        "Toutes les informations relatives sur le COVID 19 dans le monde." +
+                                        "Le nombre de cas, de cas soigné ainsi que le nombre de décès enregistrés.",
+                                        style: TextStyle(color: Colors.black26),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  )
+
+                              ),
                               ContainerContent(
                                 number: snapshot.data.cases.toString(),
                                 text: "Nombres de cas enregistrés ces 7 derniers jours",
@@ -147,17 +117,23 @@ class _HomepageState extends State<Homepage> {
                                 numberColor: Colors.greenAccent,
                                 colors: [Colors.greenAccent, Colors.white70],
                                 lineColor: Colors.green,
+                                mb: 10.0,
                               ),
                             ],
                           );
                         } else {
-                          return Center( child: CircularProgressIndicator(),);
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator()
+                            ],
+                          );
                         }
                       },
                     ),
                   );
                 },
-              childCount: 1
+              childCount: 1,
             ),
           )
         ],

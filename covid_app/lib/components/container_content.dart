@@ -11,6 +11,7 @@ class ContainerContent extends StatelessWidget {
   final data;
   final colors;
   final lineColor;
+  final mb;
 
   const ContainerContent({
     Key key,
@@ -19,18 +20,26 @@ class ContainerContent extends StatelessWidget {
     this.data,
     this.numberColor,
     this.colors,
-    this.lineColor
+    this.lineColor,
+    this.mb = 5.0
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: mb),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: Colors.white12,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5.0,
+            spreadRadius: 3.0
+          ),
+        ],
       ),
       height: (size.height - 15) * 0.3,
       width: double.infinity,
